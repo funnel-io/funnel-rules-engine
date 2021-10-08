@@ -15,19 +15,24 @@ class RulesEngine:
         """
         Runs all applicable rules and returns the result as a list.
 
-        Accepts the optional boolean argument lazy to return a generator of the results.
+        Accepts the optional boolean argument 'lazy' to return a generator of the results.
         """
         result = identity if lazy else list
         return result((rule.action(state) for rule in self.rules if rule.condition(state)))
 
-    def run_all_in_parallel(self, state):
-        """Runs all applicable rules in parallel threads."""
+    def run_all_in_parallel(self, state, lazy=False):
+        """
+        Runs all applicable rules in parallel threads and returns the result as a list.
+
+        Accepts the optional boolean argument 'lazy' to return a generator of the results.
+        """
 
         def run_rule(rule):
             return rule.action(state) if rule.condition(state) else NoMatch
 
         def only_executed(results):
-            return list(filter(lambda result: result != NoMatch, results))
+            result = identity if lazy else list
+            return result((result for result in results if result != NoMatch))
 
         with ThreadPoolExecutor() as parallel:
             return only_executed(parallel.map(run_rule, self.rules))
@@ -65,4 +70,5 @@ class NoMatch:
 
 
 def identity(value):
+    """The identity function."""
     return value

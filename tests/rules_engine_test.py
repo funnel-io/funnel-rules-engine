@@ -60,6 +60,20 @@ def test_run_all_in_parallel_with_delay():
     assert elapsed_time < 0.5
 
 
+def test_run_all_in_parallel_lazily():
+    engine = RulesEngine(
+        Rule(always_matches, then_return(1)),
+        Rule(never_matches, never_executed),
+        Rule(always_matches, then_return(2)),
+        Rule(always_matches, then_return(3)),
+        NoAction(always_matches),
+        Otherwise(then_return(OTHER_MESSAGE)),
+    )
+    lazy_results = engine.run_all_in_parallel(State(), lazy=True)
+    assert isgenerator(lazy_results)
+    assert list(lazy_results) == [1, 2, 3, None, OTHER_MESSAGE]
+
+
 def test_no_action():
     engine = RulesEngine(
         Rule(never_matches, never_executed),
