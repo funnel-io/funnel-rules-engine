@@ -63,7 +63,6 @@ class NoMatch:
 
 
 def only_executed(results):
-    """Returns a generator of the results excluding NoMatch objects."""
     return (result for result in results if result != NoMatch)
 
 
