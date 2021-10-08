@@ -9,8 +9,8 @@ A simple, generic rules engine. Inspired by [Martin Fowler's 2009 blog post](htt
 
 ## Installation
 
-Install the package `funnel_rules_engine` version `1.1+` from PyPi.
-The recommended `requirements.txt` line is `funnel_rules_engine~=1.1`.
+Install the package `funnel_rules_engine` version `1.2+` from PyPi.
+The recommended `requirements.txt` line is `funnel_rules_engine~=1.2`.
 
 ## Current Functionality
 
