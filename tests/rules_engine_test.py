@@ -1,3 +1,4 @@
+from inspect import isgenerator
 import pytest
 from time import sleep, time
 from rules_engine import NoAction, Otherwise, Rule, RulesEngine
@@ -26,6 +27,12 @@ def test_run(status, result):
 
 def test_run_all():
     assert a_rules_engine().run_all(State(status=404)) == [NOT_FOUND_MESSAGE, OTHER_MESSAGE]
+
+
+def test_run_all_lazily():
+    lazy_results = a_rules_engine().run_all(State(status=404), lazy=True)
+    assert isgenerator(lazy_results)
+    assert list(lazy_results) == [NOT_FOUND_MESSAGE, OTHER_MESSAGE]
 
 
 def test_run_all_in_parallel():

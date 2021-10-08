@@ -11,9 +11,14 @@ class RulesEngine:
             if rule.condition(state):
                 return rule.action(state)
 
-    def run_all(self, state):
-        """Runs all applicable rules."""
-        return [rule.action(state) for rule in self.rules if rule.condition(state)]
+    def run_all(self, state, lazy=False):
+        """
+        Runs all applicable rules and returns the result as a list.
+
+        Accepts the optional boolean argument lazy to return a generator of the results.
+        """
+        result = identity if lazy else list
+        return result((rule.action(state) for rule in self.rules if rule.condition(state)))
 
     def run_all_in_parallel(self, state):
         """Runs all applicable rules in parallel threads."""
@@ -57,3 +62,7 @@ class Otherwise(Rule):
 
 class NoMatch:
     """Represents a rule not matching and hence its action not being executed."""
+
+
+def identity(value):
+    return value

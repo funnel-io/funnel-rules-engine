@@ -38,7 +38,7 @@ Only apply the first rule that matches and return its result. This is comparable
 
 #### `run_all`
 
-Apply all rules that match. The result is returned as a list. 
+Apply all rules that match. The result is returned as a list, or as a generator if the optional parameter `lazy` is passed as `True`.
 
 #### `run_all_in_parallel`
 
