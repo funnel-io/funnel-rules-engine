@@ -28,9 +28,6 @@ class RulesEngine:
         def run_rule(rule):
             return rule.action(state) if rule.condition(state) else NoMatch
 
-        def only_executed(results):
-            return (result for result in results if result != NoMatch)
-
         result = identity if lazy else list
         with ThreadPoolExecutor() as parallel:
             return result(only_executed(parallel.map(run_rule, self.rules)))
@@ -70,3 +67,8 @@ class NoMatch:
 def identity(value):
     """The identity function."""
     return value
+
+
+def only_executed(results):
+    """Returns a generator of the results excluding NoMatch objects."""
+    return (result for result in results if result != NoMatch)
