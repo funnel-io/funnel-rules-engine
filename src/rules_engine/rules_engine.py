@@ -29,11 +29,11 @@ class RulesEngine:
             return rule.action(state) if rule.condition(state) else NoMatch
 
         def only_executed(results):
-            result = identity if lazy else list
-            return result((result for result in results if result != NoMatch))
+            return (result for result in results if result != NoMatch)
 
+        result = identity if lazy else list
         with ThreadPoolExecutor() as parallel:
-            return only_executed(parallel.map(run_rule, self.rules))
+            return result(only_executed(parallel.map(run_rule, self.rules)))
 
 
 class Rule:
