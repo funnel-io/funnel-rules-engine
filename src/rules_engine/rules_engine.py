@@ -62,11 +62,6 @@ class NoMatch:
     """Represents a rule not matching and hence its action not being executed."""
 
 
-def identity(value):
-    """The identity function."""
-    return value
-
-
 def only_executed(results):
     """Returns a generator of the results excluding NoMatch objects."""
     return (result for result in results if result != NoMatch)
