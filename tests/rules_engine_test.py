@@ -25,6 +25,10 @@ def test_run(status, result):
     assert a_rules_engine().run(State(status=status)) == result
 
 
+def test_run_without_any_matching_rules():
+    assert RulesEngine().run(State()) is None
+
+
 def test_run_all():
     assert a_rules_engine().run_all(State(status=404)) == [NOT_FOUND_MESSAGE, OTHER_MESSAGE]
 

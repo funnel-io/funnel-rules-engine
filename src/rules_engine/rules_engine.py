@@ -7,7 +7,7 @@ class RulesEngine:
 
     def run(self, state):
         """Short-circuits on the first applicable rule."""
-        return next(self.run_all(state, lazy=True))
+        return next(self.run_all(state, lazy=True), None)
 
     def run_all(self, state, lazy=False):
         """
