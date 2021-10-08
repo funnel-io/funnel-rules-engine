@@ -15,8 +15,7 @@ class RulesEngine:
 
         Accepts the optional boolean argument 'lazy' to return a generator of the results.
         """
-        result = identity if lazy else list
-        return result((rule.action(state) for rule in self.rules if rule.condition(state)))
+        return result((rule.action(state) for rule in self.rules if rule.condition(state)), lazy)
 
     def run_all_in_parallel(self, state, lazy=False):
         """
@@ -28,9 +27,8 @@ class RulesEngine:
         def run_rule(rule):
             return rule.action(state) if rule.condition(state) else NoMatch
 
-        result = identity if lazy else list
         with ThreadPoolExecutor() as parallel:
-            return result(only_executed(parallel.map(run_rule, self.rules)))
+            return result(only_executed(parallel.map(run_rule, self.rules)), lazy)
 
 
 class Rule:
@@ -72,3 +70,7 @@ def identity(value):
 def only_executed(results):
     """Returns a generator of the results excluding NoMatch objects."""
     return (result for result in results if result != NoMatch)
+
+
+def result(generator, lazy):
+    return generator if lazy else list(generator)
