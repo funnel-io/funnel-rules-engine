@@ -15,8 +15,8 @@ For the story behind its inception, raison d'être, and overall concept, you can
 
 ## Installation
 
-Install the package `funnel_rules_engine` version `1.2+` from PyPi.
-The recommended `requirements.txt` line is `funnel_rules_engine~=1.2`.
+Install the package `funnel_rules_engine` version `1.3+` from PyPi.
+The recommended `requirements.txt` line is `funnel_rules_engine~=1.3`.
 
 ## Current Functionality
 
