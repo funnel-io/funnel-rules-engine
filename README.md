@@ -1,5 +1,10 @@
 # Rules Engine
 
+![PyPI](https://img.shields.io/pypi/v/funnel-rules-engine)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/funnel-rules-engine)
+![PyPI - Status](https://img.shields.io/pypi/status/funnel-rules-engine)
+![PyPI - License](https://img.shields.io/pypi/l/funnel-rules-engine)
+
 A simple, generic rules engine. Inspired by [Martin Fowler's 2009 blog post](https://www.martinfowler.com/bliki/RulesEngine.html).
 
 ## Installation
