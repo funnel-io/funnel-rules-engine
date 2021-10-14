@@ -1,5 +1,5 @@
 from .rules_engine import RulesEngine, Rule, Otherwise, NoAction
 
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 
 __all__ = [RulesEngine, Rule, Otherwise, NoAction]

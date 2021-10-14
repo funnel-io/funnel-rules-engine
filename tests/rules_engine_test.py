@@ -1,3 +1,4 @@
+from inspect import isgenerator
 import pytest
 from time import sleep, time
 from rules_engine import NoAction, Otherwise, Rule, RulesEngine
@@ -24,8 +25,18 @@ def test_run(status, result):
     assert a_rules_engine().run(State(status=status)) == result
 
 
+def test_run_without_any_matching_rules():
+    assert RulesEngine().run(State()) is None
+
+
 def test_run_all():
     assert a_rules_engine().run_all(State(status=404)) == [NOT_FOUND_MESSAGE, OTHER_MESSAGE]
+
+
+def test_run_all_lazily():
+    lazy_results = a_rules_engine().run_all(State(status=404), lazy=True)
+    assert isgenerator(lazy_results)
+    assert list(lazy_results) == [NOT_FOUND_MESSAGE, OTHER_MESSAGE]
 
 
 def test_run_all_in_parallel():
@@ -51,6 +62,20 @@ def test_run_all_in_parallel_with_delay():
     elapsed_time, result = measure(lambda: engine.run_all_in_parallel(State()))
     assert result == [1, 2, 3, 4, 5]
     assert elapsed_time < 0.5
+
+
+def test_run_all_in_parallel_lazily():
+    engine = RulesEngine(
+        Rule(always_matches, then_return(1)),
+        Rule(never_matches, never_executed),
+        Rule(always_matches, then_return(2)),
+        Rule(always_matches, then_return(3)),
+        NoAction(always_matches),
+        Otherwise(then_return(OTHER_MESSAGE)),
+    )
+    lazy_results = engine.run_all_in_parallel(State(), lazy=True)
+    assert isgenerator(lazy_results)
+    assert list(lazy_results) == [1, 2, 3, None, OTHER_MESSAGE]
 
 
 def test_no_action():

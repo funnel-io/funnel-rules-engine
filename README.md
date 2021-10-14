@@ -9,14 +9,14 @@ A simple, generic rules engine. Inspired by [Martin Fowler's 2009 blog post](htt
 
 ## Installation
 
-Install the package `funnel_rules_engine` version `1.1+` from PyPi.
-The recommended `requirements.txt` line is `funnel_rules_engine~=1.1`.
+Install the package `funnel_rules_engine` version `1.2+` from PyPi.
+The recommended `requirements.txt` line is `funnel_rules_engine~=1.2`.
 
 ## Current Functionality
 
 ### `Rule`
 
-A combination of a condition and an action, both of which are callables such as functions or lambdas.
+A combination of a condition and an action, both of which are callables such as functions or lambdas. The callables must have an arity of one. If the conditional returns true given a single object, the action will be called with the same object as its argument.
 
 #### `Otherwise`
 
@@ -28,7 +28,7 @@ Special case of Rule where `None` is returned if the condition is met. Useful fo
 
 ### `RulesEngine`
 
-A generic rules engine that accepts a list of `Rule`s and some input to apply the rules to. The rules engine can either apply the first rule that matches (`run`) or all the rules that matches (`run_all`). In addition, rules can be evaluated and executed in parallel (`run_all_in_parallel`).
+A generic rules engine that accepts a list of `Rule`s and some input to apply the rules to. The rules engine can either apply the first rule that matches (`run`) or all the rules that matches (`run_all`). In addition, rules can be evaluated and executed in parallel (`run_all_in_parallel`). The latter two cases can optionally be lazily executed by returning a generator rather than a list as the result.
 
 For more on rules engines, see [Martin Fowler's blog post](https://martinfowler.com/bliki/RulesEngine.html).
 
@@ -38,8 +38,8 @@ Only apply the first rule that matches and return its result. This is comparable
 
 #### `run_all`
 
-Apply all rules that match. The result is returned as a list. 
+Apply all rules that match. The result is returned as a list, or as a generator if the optional parameter `lazy` is passed as `True`.
 
 #### `run_all_in_parallel`
 
-Evaluate and apply all rules in parallel. The result is returned as a list.
+Evaluate and apply all rules in parallel. The result is returned as a list, or as a generator if the optional parameter `lazy` is passed as `True`.

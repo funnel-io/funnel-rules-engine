@@ -7,25 +7,28 @@ class RulesEngine:
 
     def run(self, state):
         """Short-circuits on the first applicable rule."""
-        for rule in self.rules:
-            if rule.condition(state):
-                return rule.action(state)
+        return next(self.run_all(state, lazy=True), None)
 
-    def run_all(self, state):
-        """Runs all applicable rules."""
-        return [rule.action(state) for rule in self.rules if rule.condition(state)]
+    def run_all(self, state, lazy=False):
+        """
+        Runs all applicable rules and returns the result as a list.
 
-    def run_all_in_parallel(self, state):
-        """Runs all applicable rules in parallel threads."""
+        Accepts the optional boolean argument 'lazy' to return a generator of the results.
+        """
+        return result((rule.action(state) for rule in self.rules if rule.condition(state)), lazy)
+
+    def run_all_in_parallel(self, state, lazy=False):
+        """
+        Runs all applicable rules in parallel threads and returns the result as a list.
+
+        Accepts the optional boolean argument 'lazy' to return a generator of the results.
+        """
 
         def run_rule(rule):
             return rule.action(state) if rule.condition(state) else NoMatch
 
-        def only_executed(results):
-            return list(filter(lambda result: result != NoMatch, results))
-
         with ThreadPoolExecutor() as parallel:
-            return only_executed(parallel.map(run_rule, self.rules))
+            return result(only_executed(parallel.map(run_rule, self.rules)), lazy)
 
 
 class Rule:
@@ -57,3 +60,11 @@ class Otherwise(Rule):
 
 class NoMatch:
     """Represents a rule not matching and hence its action not being executed."""
+
+
+def only_executed(results):
+    return (result for result in results if result != NoMatch)
+
+
+def result(generator, lazy):
+    return generator if lazy else list(generator)
