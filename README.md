@@ -43,3 +43,7 @@ Apply all rules that match. The result is returned as a list, or as a generator 
 #### `run_all_in_parallel`
 
 Evaluate and apply all rules in parallel. The result is returned as a list, or as a generator if the optional parameter `lazy` is passed as `True`.
+
+### `when` and `then`
+
+These are convenience functions for creating simple conditions and actions. They both accept a single value that in the case of `when` will be used to check equality with the passed state and in the case of `then` will be returned, ignoring the passed state.
