@@ -48,7 +48,7 @@ class NoAction(Rule):
     """This rule returns None if its condition matches."""
 
     def __init__(self, condition):
-        super().__init__(condition, lambda state: None)
+        super().__init__(condition, then(None))
 
 
 class Otherwise(Rule):
