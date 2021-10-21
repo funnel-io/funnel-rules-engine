@@ -71,6 +71,19 @@ def when(value):
     return lambda state: state == value
 
 
+def then(value):
+    """
+    Creates an action that ignores the passed state and returns the value.
+
+    >>> then(1)("whatever")
+    1
+
+    >>> then(1)("anything")
+    1
+    """
+    return lambda _state: value
+
+
 class NoMatch:
     """Represents a rule not matching and hence its action not being executed."""
 
