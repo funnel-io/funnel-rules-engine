@@ -48,7 +48,7 @@ class NoAction(Rule):
     """This rule returns None if its condition matches."""
 
     def __init__(self, condition):
-        super().__init__(condition, lambda state: None)
+        super().__init__(condition, then(None))
 
 
 class Otherwise(Rule):
@@ -68,3 +68,29 @@ def only_executed(results):
 
 def result(generator, lazy):
     return generator if lazy else list(generator)
+
+
+def then(value):
+    """
+    Creates an action that ignores the passed state and returns the value.
+
+    >>> then(1)("whatever")
+    1
+
+    >>> then(1)("anything")
+    1
+    """
+    return lambda _state: value
+
+
+def when(value):
+    """
+    Creates a predicate function comparing the state to the value.
+
+    >>> when(1)(1)
+    True
+
+    >>> when(1)(2)
+    False
+    """
+    return lambda state: state == value
