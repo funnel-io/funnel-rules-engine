@@ -1,7 +1,7 @@
 from inspect import isgenerator
 import pytest
 from time import sleep, time
-from rules_engine import NoAction, Otherwise, Rule, RulesEngine
+from rules_engine import NoAction, Otherwise, Rule, RulesEngine, then
 
 NOT_FOUND_MESSAGE = "not found"
 NOT_IMPLEMENTED_MESSAGE = "not implemented"
@@ -41,12 +41,12 @@ def test_run_all_lazily():
 
 def test_run_all_in_parallel():
     engine = RulesEngine(
-        Rule(always_matches, then_return(1)),
+        Rule(always_matches, then(1)),
         Rule(never_matches, never_executed),
-        Rule(always_matches, then_return(2)),
-        Rule(always_matches, then_return(3)),
+        Rule(always_matches, then(2)),
+        Rule(always_matches, then(3)),
         NoAction(always_matches),
-        Otherwise(then_return(OTHER_MESSAGE)),
+        Otherwise(then(OTHER_MESSAGE)),
     )
     assert engine.run_all_in_parallel(State()) == [1, 2, 3, None, OTHER_MESSAGE]
 
@@ -66,12 +66,12 @@ def test_run_all_in_parallel_with_delay():
 
 def test_run_all_in_parallel_lazily():
     engine = RulesEngine(
-        Rule(always_matches, then_return(1)),
+        Rule(always_matches, then(1)),
         Rule(never_matches, never_executed),
-        Rule(always_matches, then_return(2)),
-        Rule(always_matches, then_return(3)),
+        Rule(always_matches, then(2)),
+        Rule(always_matches, then(3)),
         NoAction(always_matches),
-        Otherwise(then_return(OTHER_MESSAGE)),
+        Otherwise(then(OTHER_MESSAGE)),
     )
     lazy_results = engine.run_all_in_parallel(State(), lazy=True)
     assert isgenerator(lazy_results)
@@ -82,7 +82,7 @@ def test_no_action():
     engine = RulesEngine(
         Rule(never_matches, never_executed),
         NoAction(always_matches),
-        Otherwise(then_return(OTHER_MESSAGE)),
+        Otherwise(then(OTHER_MESSAGE)),
     )
     assert engine.run(State()) is None
 
@@ -90,16 +90,16 @@ def test_no_action():
 def test_otherwise():
     engine = RulesEngine(
         Rule(never_matches, never_executed),
-        Otherwise(then_return(OTHER_MESSAGE)),
+        Otherwise(then(OTHER_MESSAGE)),
     )
     assert engine.run(State()) == OTHER_MESSAGE
 
 
 def a_rules_engine():
     return RulesEngine(
-        Rule(when_is_not_found, then_return(NOT_FOUND_MESSAGE)),
-        Rule(when_is_service_not_implemented, then_return(NOT_IMPLEMENTED_MESSAGE)),
-        Otherwise(then_return(OTHER_MESSAGE)),
+        Rule(when_is_not_found, then(NOT_FOUND_MESSAGE)),
+        Rule(when_is_service_not_implemented, then(NOT_IMPLEMENTED_MESSAGE)),
+        Otherwise(then(OTHER_MESSAGE)),
     )
 
 
@@ -128,10 +128,6 @@ def return_after_delay(value, seconds=0.1):
         return value
 
     return wait_and_return
-
-
-def then_return(result):
-    return lambda state: result
 
 
 def when_is_not_found(state):
