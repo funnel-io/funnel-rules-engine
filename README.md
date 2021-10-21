@@ -7,6 +7,8 @@
 
 A simple, generic rules engine. Inspired by [Martin Fowler's 2009 blog post](https://www.martinfowler.com/bliki/RulesEngine.html).
 
+For the story behind its inception, raison d'être, and overall concept, you can watch the talk [Rules Rule](https://youtu.be/Lsi1ZhmbNDc) held by [Lennart Fridén](https://github.com/DevL) at [PyCon Sweden](https://www.pycon.se) 2021.
+
 ## Installation
 
 Install the package `funnel_rules_engine` version `1.2+` from PyPi.
