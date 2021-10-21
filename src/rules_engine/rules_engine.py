@@ -58,17 +58,16 @@ class Otherwise(Rule):
         super().__init__(lambda state: True, action)
 
 
-def when(value):
-    """
-    Creates a predicate function comparing the state to the value.
+class NoMatch:
+    """Represents a rule not matching and hence its action not being executed."""
 
-    >>> when(1)(1)
-    True
 
-    >>> when(1)(2)
-    False
-    """
-    return lambda state: state == value
+def only_executed(results):
+    return (result for result in results if result != NoMatch)
+
+
+def result(generator, lazy):
+    return generator if lazy else list(generator)
 
 
 def then(value):
@@ -84,13 +83,14 @@ def then(value):
     return lambda _state: value
 
 
-class NoMatch:
-    """Represents a rule not matching and hence its action not being executed."""
+def when(value):
+    """
+    Creates a predicate function comparing the state to the value.
 
+    >>> when(1)(1)
+    True
 
-def only_executed(results):
-    return (result for result in results if result != NoMatch)
-
-
-def result(generator, lazy):
-    return generator if lazy else list(generator)
+    >>> when(1)(2)
+    False
+    """
+    return lambda state: state == value
