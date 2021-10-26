@@ -2,9 +2,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 
 class RulesEngine:
-    def __init__(self, *rules, executor=ThreadPoolExecutor):
+    def __init__(self, *rules):
         self.rules = rules
-        self.executor = executor
 
     def run(self, state):
         """Short-circuits on the first applicable rule."""
@@ -28,7 +27,7 @@ class RulesEngine:
         def run_rule(rule):
             return rule.action(state) if rule.condition(state) else NoMatch
 
-        with self.executor() as parallel:
+        with ThreadPoolExecutor() as parallel:
             return result(only_executed(parallel.map(run_rule, self.rules)), lazy)
 
 

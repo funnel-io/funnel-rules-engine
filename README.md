@@ -48,7 +48,7 @@ Apply all rules that match. The result is returned as a list, or as a generator 
 
 #### `run_all_in_parallel`
 
-Evaluate and apply all rules in parallel. The result is returned as a list, or as a generator if the optional parameter `lazy` is passed as `True`. By default uses a [ThreadPoolExecutor](https://docs.python.org/3/library/concurrent.futures.html#threadpoolexecutor) but this can be configured by passing any class implementing the [Executor](https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Executor) interface as the `executor` keyword when creating the rules engine.
+Evaluate and apply all rules in parallel. The result is returned as a list, or as a generator if the optional parameter `lazy` is passed as `True`.
 
 ### `when` and `then`
 
