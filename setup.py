@@ -16,8 +16,8 @@ setup(
     version=version,
     description="A simple, generic rules engine.",
     license="MIT",
-    author="Funnel Dev Team",
-    author_email="connector@funnel.io",
+    author="The Funnel Dev Team",
+    author_email="open-source@funnel.io",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: MIT License",
