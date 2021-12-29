@@ -5,6 +5,10 @@ class RulesEngine:
     def __init__(self, *rules):
         self.rules = rules
 
+    def reject(self, *tags):
+        """Returns a new instance without the rules matching any of the given tags."""
+        return self.__class__(*filter(lambda rule: not rule.matches(*tags), self.rules))
+
     def run(self, state):
         """Short-circuits on the first applicable rule."""
         return next(self.run_all(state, lazy=True), None)
@@ -30,6 +34,10 @@ class RulesEngine:
         with ThreadPoolExecutor() as parallel:
             return result(only_executed(parallel.map(run_rule, self.rules)), lazy)
 
+    def select(self, *tags):
+        """Returns a new instance with the rules matching any of the given tags."""
+        return self.__class__(*filter(lambda rule: rule.matches(*tags), self.rules))
+
 
 class Rule:
     """
@@ -39,23 +47,30 @@ class Rule:
     The action takes a state and is executed if the condition returned True.
     """
 
-    def __init__(self, condition, action):
+    def __init__(self, condition, action, tags=None):
         self.condition = condition
         self.action = action
+        self.tags = tags or []
+
+    def matches(self, *tags):
+        return any((tag in self.tags for tag in tags))
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__} id={id(self)} tags={self.tags}>"
 
 
 class NoAction(Rule):
     """This rule returns None if its condition matches."""
 
-    def __init__(self, condition):
-        super().__init__(condition, then(None))
+    def __init__(self, condition, tags=None):
+        super().__init__(condition, then(None), tags=tags)
 
 
 class Otherwise(Rule):
     """This rule always executes its action."""
 
-    def __init__(self, action):
-        super().__init__(lambda state: True, action)
+    def __init__(self, action, tags=None):
+        super().__init__(lambda state: True, action, tags=tags)
 
 
 class NoMatch:
