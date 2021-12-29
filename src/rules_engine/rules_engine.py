@@ -53,6 +53,7 @@ class Rule:
         self.tags = tags or []
 
     def matches(self, *tags):
+        """Returns whether the rule is tagged with any of the given tags."""
         return any((tag in self.tags for tag in tags))
 
     def __repr__(self):
