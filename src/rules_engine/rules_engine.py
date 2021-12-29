@@ -70,7 +70,7 @@ class Otherwise(Rule):
     """This rule always executes its action."""
 
     def __init__(self, action, tags=None):
-        super().__init__(lambda state: True, action, tags=tags)
+        super().__init__(then(True), action, tags=tags)
 
 
 class NoMatch:
