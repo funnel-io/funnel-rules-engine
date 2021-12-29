@@ -24,6 +24,8 @@ The recommended `requirements.txt` line is `funnel_rules_engine~=1.3`.
 
 A combination of a condition and an action, both of which are callables such as functions or lambdas. The callables must have an arity of one. If the conditional returns true given a single object, the action will be called with the same object as its argument.
 
+When creating a rule, it can also be tagged with a list of tags (see `RulesEngine.reject` and `RulesEngine.select`).
+
 #### `Otherwise`
 
 Special case of Rule where the action always fires. Suitable as a catch-all last rule.
@@ -49,6 +51,10 @@ Apply all rules that match. The result is returned as a list, or as a generator 
 #### `run_all_in_parallel`
 
 Evaluate and apply all rules in parallel. The result is returned as a list, or as a generator if the optional parameter `lazy` is passed as `True`.
+
+#### `select` and `reject`
+
+These methods return a new rules engine containing the rules matching/not matching the given tags.
 
 ### `when` and `then`
 
