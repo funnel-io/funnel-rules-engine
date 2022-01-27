@@ -22,5 +22,5 @@ clean: clean-dist
 .PHONY: clean-dist
 clean-dist:
 	rm -rf build
-	rm -rf src/rules_engine.egg-info
+	rm -rf src/funnel_rules_engine.egg-info
 	rm -rf dist
