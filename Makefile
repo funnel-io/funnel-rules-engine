@@ -31,3 +31,11 @@ clean-dist:
 	rm -rf build
 	rm -rf src/funnel_rules_engine.egg-info
 	rm -rf dist
+
+.PHONY: release
+release: test dist
+	. venv/bin/activate && twine upload dist/*
+
+.PHONY: test-release
+test-release: test dist
+	. venv/bin/activate && twine upload -r testpypi dist/*
