@@ -1,0 +1,9 @@
+black
+build
+flake8
+mypy
+pytest
+pytest-clarity
+pytest-cov
+twine
+types-requests
